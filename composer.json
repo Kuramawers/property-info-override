@@ -1,0 +1,48 @@
+{
+    "name": "amacode/property-info-override",
+    "version": "1.0.0",
+    "description": "Wrapper for symfony PropertyInfo component which returns user-defined property info if set",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Amacode\\PropertyInfoOverride\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Amacode\\PropertyInfoOverride\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nikolay Vitukevich",
+            "email": "kuramawers@gmail.com"
+        }
+    ],
+    "minimum-stability": "RC",
+    "require": {
+        "php": ">=7.4",
+        "symfony/property-info": ">=4",
+        "symfony/dependency-injection": ">=4",
+        "symfony/config": ">=4",
+        "koriym/attributes": "^1.0",
+        "symfony/http-kernel": ">=4"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "slevomat/coding-standard": "^7.2",
+        "symplify/easy-coding-standard": "^10.2",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": ">=4"
+    },
+    "scripts": {
+        "code:style:fix": "ecs check src tests/Functional tests/Sandbox/SymfonyCommon ecs.php --fix --ansi",
+        "code:style:lint": "ecs check src tests/Functional tests/Sandbox/SymfonyCommon ecs.php --ansi"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

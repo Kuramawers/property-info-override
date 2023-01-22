@@ -1,0 +1,20 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  property_info_override.attribute_reader:
+    class: 'Koriym\Attributes\AttributeReader'
+
+  property_info_override.dual_reader:
+    class: 'Koriym\Attributes\DualReader'
+    arguments:
+      - '@annotations.reader'
+      - '@property_info_override.attribute_reader'
+
+  Amacode\PropertyInfoOverride\Extractor\Type\OverridePropertyTypeExtractor:
+    arguments:
+      $annotationReader: '@property_info_override.dual_reader'
+    tags:
+      - name: 'property_info.type_extractor'
+        priority: -50
