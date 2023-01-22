@@ -8,20 +8,44 @@ on:
 
 jobs:
   code_quality:
-    name: 'Code style check'
+    name: 'Code quality analysis'
     runs-on: ubuntu-latest
+    needs: tests
     steps:
       - uses: actions/checkout@v3
+      - name: "Install dependencies"
+        uses: addnab/docker-run-action@v3
+        with:
+          image: "webdevops/php-dev:7.4"
+          options: |
+            -v ${{ github.workspace }}:/package
+            -w /package
+          run: composer install
       - name: "Run code style check"
         uses: addnab/docker-run-action@v3
         with:
-          image: "webdevops/php:7.4"
+          image: "webdevops/php-dev:7.4"
           options: |
-            -v ${{ github.workspace }}:/app
-            -w /app
-          run: |
-            composer install
-            composer code:style:lint
+            -v ${{ github.workspace }}:/package
+            -w /package
+          run: composer code:style:lint
+      - name: Download coverage results
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-results
+          path: coverages
+      - name: Merge coverage results
+        uses: addnab/docker-run-action@v3
+        with:
+          image: "webdevops/php-dev:7.4"
+          options: |
+            -v ${{ github.workspace }}:/package
+            -w /package
+          run: COVERAGES_DIR=/package/coverages composer test:coverage:merge
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v3
+        with:
+          files: ${{ github.workspace }}/coverage-merged.xml
 
   tests:
     name: 'Functional tests'
@@ -38,10 +62,19 @@ jobs:
       - name: "Run symfony${{ matrix.symfony }} functional tests"
         uses: addnab/docker-run-action@v3
         with:
-          image: "webdevops/php:${{ matrix.php }}"
+          image: "webdevops/php-dev:${{ matrix.php }}"
           options: |
             -v ${{ github.workspace }}/tests/Sandbox/Symfony${{ matrix.symfony }}:/app
             -v ${{ github.workspace }}/tests/Sandbox/SymfonyCommon:/common
             -v ${{ github.workspace }}:/package
             -w /app
-          run: /common/entrypoint.sh && composer test:functional
+          run: |
+            /common/entrypoint.sh
+            composer test:functional:coverage
+            mkdir -p /package/var/tests/coverages
+            cp /app/var/tests/coverages/coverage.cov /package/var/tests/coverages/coverage-${{ matrix.symfony }}-${{ matrix.php }}.cov
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-results
+          path: ${{ github.workspace }}/var/tests/coverages/*

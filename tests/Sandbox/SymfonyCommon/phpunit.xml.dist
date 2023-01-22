@@ -11,4 +11,10 @@
             <directory>vendor/amacode/property-info-override/tests/Functional</directory>
         </testsuite>
     </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">vendor/amacode/property-info-override/src</directory>
+        </include>
+    </coverage>
 </phpunit>

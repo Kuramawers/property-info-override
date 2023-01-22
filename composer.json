@@ -34,11 +34,16 @@
         "slevomat/coding-standard": "^7.2",
         "symplify/easy-coding-standard": "^10.2",
         "phpunit/phpunit": "^9.5",
-        "symfony/browser-kit": ">=4"
+        "symfony/browser-kit": ">=4",
+        "phpunit/phpcov": "^8.2"
     },
     "scripts": {
         "code:style:fix": "ecs check src tests/Functional tests/Sandbox/SymfonyCommon ecs.php --fix --ansi",
-        "code:style:lint": "ecs check src tests/Functional tests/Sandbox/SymfonyCommon ecs.php --ansi"
+        "code:style:lint": "ecs check src tests/Functional tests/Sandbox/SymfonyCommon ecs.php --ansi",
+        "test:coverage:merge": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpcov merge --clover coverage-merged.xml ${COVERAGES_DIR}"
+        ]
     },
     "config": {
         "allow-plugins": {

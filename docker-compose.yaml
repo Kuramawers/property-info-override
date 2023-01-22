@@ -2,14 +2,14 @@ version: '3'
 
 services:
   php_sandbox:
-    image: webdevops/php:7.4
-    working_dir: '/app'
+    image: webdevops/php-dev:7.4
+    working_dir: '/package'
     entrypoint: ''
     volumes:
-      - .:/app
+      - .:/package
 
   symfony4_sandbox:
-    image: webdevops/php:7.4
+    image: webdevops/php-dev:7.4
     working_dir: '/app'
     entrypoint: '/common/entrypoint.sh'
     volumes:
@@ -18,7 +18,7 @@ services:
       - .:/package
 
   symfony5_sandbox:
-    image: webdevops/php:7.4
+    image: webdevops/php-dev:7.4
     working_dir: '/app'
     entrypoint: '/common/entrypoint.sh'
     volumes:
@@ -27,7 +27,7 @@ services:
       - .:/package
 
   symfony6_sandbox:
-    image: webdevops/php:8.1
+    image: webdevops/php-dev:8.1
     working_dir: '/app'
     entrypoint: '/common/entrypoint.sh'
     volumes:

@@ -71,7 +71,12 @@
             "@putenv APP_ENV=test",
             "vendor/bin/phpunit"
         ],
-        "test:functional": "@test --testsuite=functional"
+        "test:coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "@test"
+        ],
+        "test:functional": "@test --testsuite=functional",
+        "test:functional:coverage": "@test:coverage --testsuite=functional --coverage-php=./var/tests/coverages/coverage.cov"
     },
     "conflict": {
         "symfony/symfony": "*"

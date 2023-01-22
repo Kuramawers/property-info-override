@@ -1,3 +1,7 @@
+![Packagist Version](https://img.shields.io/packagist/v/amacode/property-info-override)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Kuramawers/property-info-override/ci.yml)
+![Codecov](https://img.shields.io/codecov/c/github/Kuramawers/property-info-override)
+![GitHub](https://img.shields.io/github/license/Kuramawers/property-info-override)
 ### Overview
 This package is an extension for [PropertyInfo](https://github.com/symfony/property-info) component.  
 Sometimes the default `PropertyInfoExtractor` defines the property meta info not the way you want. It may break you API schema generation or requests validations (is actual for [ApiPlatform](https://api-platform.com/)).  
