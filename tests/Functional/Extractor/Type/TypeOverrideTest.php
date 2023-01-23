@@ -65,5 +65,31 @@ final class TypeOverrideTest extends WebTestCase
                 ],
             ],
         ];
+
+        yield 'changeTypeButKeepNullable' => [
+            'className' => TestEntity::class,
+            'propertyName' => 'changeTypeButKeepNullable',
+            'expectedTypes' => [
+                [
+                    'builtinType' => 'int',
+                    'isNullable' => true,
+                    'className' => null,
+                ],
+            ],
+        ];
+    }
+
+    public function testFailedForNonExistingProperty(): void
+    {
+        $client = self::createClient();
+
+        $client->request('GET', '/tests/types', [
+            'className' => TestEntity::class,
+            'propertyName' => 'non_existing',
+        ]);
+
+        self::assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+        self::assertSame($client->getResponse()->getContent(), '[]');
     }
 }

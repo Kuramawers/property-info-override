@@ -11,11 +11,16 @@ use Symfony\Component\PropertyInfo\Type;
 
 final class OverridePropertyTypeExtractor implements PropertyTypeExtractorInterface
 {
+    private const CONTEXT_CALLEE = '_callee';
+
     private Reader $annotationReader;
 
-    public function __construct(Reader $annotationReader)
+    private PropertyTypeExtractorInterface $propertyTypeExtractor;
+
+    public function __construct(Reader $annotationReader, PropertyTypeExtractorInterface $propertyTypeExtractor)
     {
         $this->annotationReader = $annotationReader;
+        $this->propertyTypeExtractor = $propertyTypeExtractor;
     }
 
     /**
@@ -23,8 +28,18 @@ final class OverridePropertyTypeExtractor implements PropertyTypeExtractorInterf
      */
     public function getTypes($class, $property, array $context = []): ?array
     {
+        if (($context[self::CONTEXT_CALLEE] ?? null) === self::class) {
+            return null;
+        }
+
+        return $this->resolveTypes($class, $property);
+    }
+
+    private function resolveTypes(string $class, string $property): ?array
+    {
         try {
             $typeAnnotations = $this->getTypeAnnotations($class, $property);
+            $typeAnnotations = \array_map($this->createDefaultTypeDataFiller($class, $property), $typeAnnotations);
 
             return !empty($typeAnnotations) ? \array_map([$this, 'createTypeFromAnnotation'], $typeAnnotations) : null;
         } catch (\ReflectionException $e) {
@@ -60,5 +75,17 @@ final class OverridePropertyTypeExtractor implements PropertyTypeExtractorInterf
             $annotation->collectionKeyType,
             $annotation->collectionValueType
         );
+    }
+
+    private function createDefaultTypeDataFiller(string $class, string $property): callable
+    {
+        $types = $this->propertyTypeExtractor->getTypes($class, $property, [self::CONTEXT_CALLEE => self::class]);
+
+        return static function (PropertyType $type) use ($types): PropertyType {
+            $newType = clone $type;
+            $newType->nullable = $newType->nullable ?? isset($types[0]) && $types[0]->isNullable();
+
+            return $newType;
+        };
     }
 }

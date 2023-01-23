@@ -17,7 +17,7 @@ final class PropertyType
 {
     public string $type;
 
-    public bool $nullable;
+    public ?bool $nullable;
 
     public ?string $class;
 
@@ -29,7 +29,7 @@ final class PropertyType
 
     public function __construct(
         string $type,
-        bool $nullable = false,
+        ?bool $nullable = null,
         ?string $class = null,
         bool $collection = false,
         ?Type $collectionKeyType = null,

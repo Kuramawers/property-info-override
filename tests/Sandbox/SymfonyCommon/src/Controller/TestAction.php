@@ -28,7 +28,7 @@ final class TestAction extends AbstractController
         $className = $request->get('className');
         $propertyName = $request->get('propertyName');
 
-        $types = $this->propertyInfoExtractor->getTypes($className, $propertyName);
+        $types = $this->propertyInfoExtractor->getTypes($className, $propertyName) ?? [];
 
         return $this->json(\array_map([$this, 'convertTypeToArray'], $types));
     }

@@ -88,5 +88,5 @@
             "docker": false
         }
     },
-    "minimum-stability": "rc"
+    "minimum-stability": "dev"
 }

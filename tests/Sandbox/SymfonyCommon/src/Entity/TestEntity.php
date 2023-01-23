@@ -39,6 +39,13 @@ if (PHP_MAJOR_VERSION < 8 || Kernel::MAJOR_VERSION < 5) {
          * @ORM\Column(type="integer", nullable=true)
          */
         private ?int $notRealNullable;
+
+        /**
+         * @PropertyType(type="int")
+         *
+         * @ORM\Column(type="integer", nullable=true)
+         */
+        private ?int $changeTypeButKeepNullable;
     }
 } else {
     #[ORM\Entity]
@@ -59,5 +66,9 @@ if (PHP_MAJOR_VERSION < 8 || Kernel::MAJOR_VERSION < 5) {
         #[PropertyType(type: 'int', nullable: false)]
         #[ORM\Column(type: 'integer', nullable: true)]
         private ?int $notRealNullable;
+
+        #[PropertyType(type: 'int')]
+        #[ORM\Column(type: 'integer', nullable: true)]
+        private ?int $changeTypeButKeepNullable;
     }
 }

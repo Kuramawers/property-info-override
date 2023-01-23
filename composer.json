@@ -1,6 +1,5 @@
 {
     "name": "amacode/property-info-override",
-    "version": "1.0.0",
     "description": "Wrapper for symfony PropertyInfo component which returns user-defined property info if set",
     "type": "library",
     "license": "MIT",
